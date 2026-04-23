@@ -17,6 +17,11 @@ st.write("The name of your smoothie will be ", name_on_order)
 
 cnx=st.connection("snowflake")
 session=cnx.session()
+try:
+    df = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
+    st.write(df.collect())   # instead of dataframe
+except Exception as e:
+    st.write(e)
 
 my_dataframe = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
 st.dataframe(my_dataframe.to_pandas(), use_container_width=True)
@@ -46,9 +51,5 @@ if ingredients_list:
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie is ordered')
-try:
-    df = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
-    st.write(df.collect())   # instead of dataframe
-except Exception as e:
-    st.write(e)
+
 
