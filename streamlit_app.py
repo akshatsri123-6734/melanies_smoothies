@@ -18,16 +18,15 @@ st.write("The name of your smoothie will be ", name_on_order)
 cnx=st.connection("snowflake")
 session=cnx.session()
 
+# set context
+session.sql("USE DATABASE SMOOTHIES").collect()
+session.sql("USE SCHEMA PUBLIC").collect()
+session.sql("USE WAREHOUSE COMPUTE_WH").collect()
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'),col('SEARCH_ON'))
-# st.dataframe(data=my_dataframe, use_container_width=True)
-try:
-    df = my_dataframe.collect()
-    st.write(df)
-except Exception as e:
-    st.write("ERROR:", e)
-st.stop()
-
+# fetch data
+my_dataframe = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
+# display
+st.dataframe(my_dataframe.to_pandas(), use_container_width=True)
 ingredients_list=st.multiselect(
     'Choose up to 5 ingredients:'
     ,my_dataframe
