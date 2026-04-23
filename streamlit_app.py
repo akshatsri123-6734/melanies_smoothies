@@ -24,7 +24,8 @@ session.sql("USE SCHEMA PUBLIC").collect()
 session.sql("USE WAREHOUSE COMPUTE_WH").collect()
 
 # fetch data
-my_dataframe = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
+my_dataframe = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS").select(col('FRUIT_NAME'),
+                                                                     col('SEARCH_ON'))
 # display
 st.dataframe(my_dataframe.to_pandas(), use_container_width=True)
 ingredients_list=st.multiselect(
